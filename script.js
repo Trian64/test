@@ -1,5 +1,5 @@
 window.onload = function() {
-    fetch('data.json')
+    fetch('QRScout_config (1).json')
         .then(response => response.json())
         .then(data => {
             let output = "<ul>";
