@@ -1,13 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My JSON Website</title>
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reefscape Scouting</title>
+  <style>
+    /* Light Theme */
+    body {
+      background-color: hsl(0, 0%, 100%);
+      color: hsl(0, 0%, 3.9%);
+      font-family: Arial, sans-serif;
+    }
+
+    .card {
+      background-color: hsl(0, 0%, 100%);
+      color: hsl(0, 0%, 3.9%);
+      border: 1px solid hsl(0, 0%, 89.8%);
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+    }
+
+    .primary {
+      color: hsl(210, 100%, 50%);
+    }
+
+    /* Dark Theme */
+    .dark-mode body {
+      background-color: hsl(0, 0%, 3.9%);
+      color: hsl(0, 0%, 98%);
+    }
+
+    .dark-mode .card {
+      background-color: hsl(0, 0%, 3.9%);
+      color: hsl(0, 0%, 98%);
+      border: 1px solid hsl(0, 0%, 14.9%);
+    }
+
+    .dark-mode .primary {
+      color: hsl(210, 100%, 50%);
+    }
+  </style>
 </head>
 <body>
-   
-    <div id="data-container"></div>
+  <div id="scoutingForm"></div>
+
+  <script>
+    // JSON data provided
+    const scoutingData = {
+      "title": "QRScout",
+      "page_title": "Reefscape",
+      "delimiter": "\t",
+      "teamNumber": 1024,
+      "theme": {
+        "light": {
+          "background": "0 0% 100%",
+          "foreground": "0 0% 3.9%",
+          "card": "0 0% 100%",
+          "card_foreground": "0 0% 3.9%",
+          "primary": "210 100% 50%",
+          "primary_foreground": "0 85.7% 97.3%",
+          "secondary": "0 0% 96.1%",
+          "secondary_foreground": "0 0% 9%",
+          "muted": "0 0% 96.1%",
+          "muted_foreground": "0 0% 45.1%",
+          "accent": "0 0% 96.1%",
+          "accent_foreground": "0 0% 9%",
+          "destructive": "210 100% 40%",
+          "destructive_foreground": "0 0% 98%",
+          "border": "0 0% 89.8%",
+          "input": "0 0% 89.8%",
+          "ring": "210 100% 50%",
+          "chart_1": "210 100% 50%",
+          "chart_2": "173 58% 39%",
+          "chart_3": "197 37% 24%",
+          "chart_4": "43 74% 66%",
+          "chart_5": "27 87% 67%"
+        },
+        "dark": {
+          "background": "0 0% 3.9%",
+          "foreground": "0 0% 98%",
+          "card": "0 0% 3.9%",
+          "card_foreground": "0 0% 98%",
+          "popover": "0 0% 3.9%",
+          "popover_foreground": "0 0% 98%",
+          "primary": "210 100% 50%",
+          "primary_foreground": "0 85.7% 97.3%",
+          "secondary": "0 0% 14.9%",
+          "secondary_foreground": "0 0% 98%",
+          "muted": "0 0% 14.9%",
+          "muted_foreground": "0 0% 63.9%",
+          "accent": "0 0% 14.9%",
+          "accent_foreground": "0 0% 98%",
+          "destructive": "210 100% 40%",
+          "destructive_foreground": "0 0% 98%",
+          "border": "0 0% 14.9%",
+          "input": "0 0% 14.9%",
+          "ring": "210 100% 50%",
+          "chart_1": "220 70% 50%",
+          "chart_2": "160 60% 45%",
+          "chart_3": "30 80% 55%",
+          "chart_4": "280 65% 60%",
+          "chart_5": "340 75% 55%"
+        }
+      },
+      "sections": [
+        {
+          "name": "Prematch",
+          "fields": [
+            {
+              "title": "Scouter Name",
+              "type": "text",
+              "required": true,
+              "code": "scouter",
+              "formResetBehavior": "preserve",
+              "defaultValue": ""
+            },
+            {
+              "title": "Match Number",
+              "type": "number",
+              "required": true,
+              "code": "matchNumber",
+              "formResetBehavior": "increment",
+              "defaultValue": 1
+            },
+            {
+              "title": "Team Number",
+              "type": "number",
+              "required": true,
+              "code": "teamNumber",
+              "formResetBehavior": "reset",
+              "defaultValue": 0,
+              "min": 0,
+              "max": 19999
+            },
+            {
+              "title": "No Show",
+              "type": "boolean",
+              "required": false,
+              "code": "noShow",
+              "formResetBehavior": "reset",
+              "defaultValue": false
+            }
+          ]
+        },
+        {
+          "name": "Autonomous",
+          "fields": [
+            {
+              "title": "Leave?",
+              "type": "boolean",
+              "required": false,
+              "code": "Mved",
+              "formResetBehavior": "reset",
+              "defaultValue": false
+            },
+            {
+              "title": "Pickup Location for Coral",
+              "type": "select",
+              "required": false,
+              "code": "TGPL",
+              "formResetBehavior": "reset",
+              "defaultValue": "",
+              "choices": {
+                "1": "None",
+                "2": "Ground",
+                "3": "Human Player",
+                "4": "Both"
+              },
+              "multiSelect": true
+            },
+            {
+              "title": "Pickup Location for Algae",
+              "type": "select",
+              "required": false,
+              "code": "TGPL",
+              "formResetBehavior": "reset",
+              "defaultValue": "",
+              "choices": {
+                "1": "None",
+                "2": "Ground",
+                "3": "Reef",
+                "4": "Both"
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    // Function to create form sections and fields
+    function createForm() {
+      const formContainer = document.getElementById('scoutingForm');
+      const sections = scoutingData.sections;
+
+      sections.forEach(section => {
+        const sectionDiv = document.createElement('div');
+        sectionDiv.classList.add('card');
+        const sectionTitle = document.createElement('h3');
+        sectionTitle.textContent = section.name;
+        sectionDiv.appendChild(sectionTitle);
+
+        section.fields.forEach(field => {
+          const fieldDiv = document.createElement('div');
+          const label = document.createElement('label');
+          label.textContent = field.title;
+          fieldDiv.appendChild(label);
+
+          if (field.type === 'text') {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = field.code;
+            input.placeholder = field.description;
+            fieldDiv.appendChild(input);
+          } else if (field.type === 'number') {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.name = field.code;
+            input.placeholder = field.description;
+            input.min = field.min || 0;
+            input.max = field.max || 19999;
+            fieldDiv.appendChild(input);
+          } else if (field.type === 'select') {
+            const select = document.createElement('select');
+            select.name = field.code;
+            field.choices && Object.entries(field.choices).forEach(([key, value]) => {
+              const option = document.createElement('option');
+              option.value = key;
+              option.textContent = value;
+              select.appendChild(option);
+            });
+            fieldDiv.appendChild(select);
+          } else if (field.type === 'boolean') {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = field.code;
+            fieldDiv.appendChild(checkbox);
+          }
+
+          formContainer.appendChild(fieldDiv);
+        });
+
+        formContainer.appendChild(sectionDiv);
+      });
+    }
+
+    createForm();
+  </script>
 </body>
 </html>
